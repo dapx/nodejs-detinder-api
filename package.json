@@ -1,0 +1,23 @@
+{
+  "name": "detinder-server",
+  "version": "1.0.0",
+  "description": "Detinder REST Server",
+  "main": "apps.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "mysql": "^2.11.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0",
+    "eslint": "^3.8.1",
+    "eslint-plugin-react": "^6.4.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel code/ -d build/ -s",
+    "start": "node build/apps.js"
+  },
+  "author": "Daniel André da Silva",
+  "license": "ISC"
+}
