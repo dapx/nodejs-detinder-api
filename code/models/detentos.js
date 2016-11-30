@@ -10,6 +10,17 @@ export class Detentos {
     });
   }
 
+  findDetentoById(ind_id, res){
+    var sql = `select * from Detentos where ind_id=${ind_id}`;
+    conn.query(sql, function(err, result){
+      if (err) {
+        console.error(err);
+      }
+      console.log(result)
+      res.send(result);
+    });
+  }
+
   findDetentoByReq(detento, res){
     var sql = 'select * from Detentos';
     let detentoObj = detento;
@@ -24,7 +35,12 @@ export class Detentos {
 
 
       for (var value in detentoObj[key]){
-        sql += this.mountSQL(key, detentoObj[key][value]);
+        console.log(key);
+        if (key !== 'ind_altura'){
+          sql += this.mountSQL(key, detentoObj[key][value]);
+        } else {
+          sql += this.mountSQLRange(key, detentoObj[key][value]-0.1, detentoObj[key][value]+0.1);
+        }
         sql = this.appendOr(sql);
       }
       if (sql !== 'select * from Detentos'){
@@ -45,7 +61,7 @@ export class Detentos {
       sql += this.mountSQL(columns[i], values[i]);
     }*/
 
-    //Cria consulta removendo o ultimo AND
+    console.log(sql);
     conn.query(sql, function(err, result){
       if (err) {
         console.error(err);
@@ -57,6 +73,10 @@ export class Detentos {
 
   mountSQL(key, value){
     return " " + key + " like '%" + value + "%'";
+  }
+
+  mountSQLRange(key, value, value2){
+    return " " + key + " > " + value + " and " + key + " < " + value2;
   }
 
   appendOr(sql){

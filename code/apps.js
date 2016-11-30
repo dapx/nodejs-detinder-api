@@ -19,6 +19,11 @@ app.post('/detentos', function (req, res) {
   detentos.findDetentoByReq(req.body, res);
 });
 
+app.get('/detentos/:ind_id', function(req, res) {
+  console.log(`Get /detentos/${req.params.ind_id}`);
+  detentos.findDetentoById(req.params.ind_id, res);
+});
+
 app.post('/detentos/create', function(req, res){
   console.log(req.body);
   detentos.post(req.body, res);
