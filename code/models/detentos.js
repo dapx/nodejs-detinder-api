@@ -9,11 +9,66 @@ export class Detentos {
       res.send(result);
     });
   }
-  
-/*
+
+  findDetentoByReq(detento, res){
+    var sql = 'select * from Detentos';
+    let detentoObj = detento;
+    for (var key in detentoObj){
+      if (detentoObj[key].length > 0){
+        if (sql === 'select * from Detentos'){
+          sql += ' where (';
+        } else {
+        sql = this.appendAnd(sql);
+        }
+      }
+
+
+      for (var value in detentoObj[key]){
+        sql += this.mountSQL(key, detentoObj[key][value]);
+        sql = this.appendOr(sql);
+      }
+      if (sql !== 'select * from Detentos'){
+        sql = sql.slice(0,-2) + ') ';
+      }
+      //Remove o ultimo OR e fecha o parenteses
+      //Adiciona um AND para o proximo campo
+
+    }
+  if (sql === 'select * from Detentos where') {
+     sql = sql.slice(0,-5);
+   }
+
+    /*Codigo antigo que é interessante manter por enquanto
+
+    for (var i = 0; i<columns.length; i++){
+      if (i !== 0) sql += " and";
+      sql += this.mountSQL(columns[i], values[i]);
+    }*/
+
+    //Cria consulta removendo o ultimo AND
+    conn.query(sql, function(err, result){
+      if (err) {
+        console.error(err);
+      }
+      console.log(result)
+      res.send(result);
+    });
+  }
+
+  mountSQL(key, value){
+    return " " + key + " like '%" + value + "%'";
+  }
+
+  appendOr(sql){
+    return sql + " or";
+  }
+
+  appendAnd(sql){
+    return sql + " and (";
+  }
+
   post(detento, res){
-    console.log(detento);
-    conn.query('insert into Detentos (ind_id) values (?)', detento.ind_id, function(err, result){
+    conn.query('insert into Detentos set ?', detento, function(err, result){
       if (err) {
         console.error(err);
         res.send({status: 1, message: 'Error! Detento not created.'});
@@ -22,6 +77,6 @@ export class Detentos {
         res.send({status: 0, message: 'Detento created'});
       }
     });
-  }*/
+  }
 
 }
